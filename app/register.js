@@ -3,6 +3,7 @@ import { View, TextInput, Button, StyleSheet,Alert } from 'react-native';
 import Picker from "../components/DropDown";
 import {isValidEmail} from "../assets/helpercode/utilities";
 
+//cleaned code
 
 const Register = () => {
 
