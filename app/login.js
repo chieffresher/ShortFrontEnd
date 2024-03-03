@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet,Text,
   TouchableOpacity,Alert } from 'react-native';
 import { Link } from 'expo-router';
+import axios  from 'axios';
 
 
 const Login = () => {
@@ -10,7 +11,37 @@ const Login = () => {
 
   const submit = () => {
     // Handle the button press, you can add validation logic here
-    Alert.alert(`Email : ${email} Password : ${password}`);
+    if(email.trim()==="")
+    {
+      Alert.alert("Email is required.")
+      return
+    }
+    if(password.trim()==="")
+    {
+      Alert.alert("Password is required.")
+      return
+    }
+    //send login request
+    axios.post("http://72.167.150.61:7002/api/login",
+    {Id:0,
+     UserEmail:email,
+     UserPassword:password})
+     .then(res => 
+      {
+        let data = res.data
+        if(data.isUser === true)
+        {
+           console.log("login successful")
+           let token = data.jwtToken;
+           console.log("Token : "+token)
+        }
+        else
+        {
+          console.log("login failed.");
+        }
+      })
+     .catch(err => console.log(`Error validating user : ${err}`))
+
   };
 
   const handleForgotPassword = () => {
