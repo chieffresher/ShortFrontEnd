@@ -4,10 +4,13 @@ import { View, TextInput, Button, StyleSheet,Text,
 import { Link } from 'expo-router';
 import axios  from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigation = useNavigation();
 
   const submit = () => {
     // Handle the button press, you can add validation logic here
@@ -31,10 +34,10 @@ const Login = () => {
         let data = res.data
         if(data.isUser === true)
         {
-           console.log("login successful")
            // Store token securely
             await AsyncStorage.setItem('token', data.jwtToken);
           //redirect to dashboard or home page
+           navigation.navigate('index')
         }
         else
         {
