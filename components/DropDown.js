@@ -5,7 +5,7 @@ import {Picker} from '@react-native-picker/picker';
 import axios from 'axios';
 
 export default function DropDown({PickerItems, DisplayName, selectedItem,
-     onSelectValueChange, ApiUrl,ApiAuthorizationHeader}) {
+     onSelectValueChange,DbValueFieldName, ApiUrl,ApiAuthorizationHeader}) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([]);
@@ -32,7 +32,8 @@ export default function DropDown({PickerItems, DisplayName, selectedItem,
                 {headers: {Authorization: ApiAuthorizationHeader}}) // (optional) setting authorization header
 
                let data = response.data
-               let pickerItems = data.map((item)=> <Picker.Item label={item.name} value={item.name} 
+               let pickerItems = data.map((item)=> <Picker.Item label={item[DbValueFieldName]} 
+               value={item[DbValueFieldName]} 
                key={item.id}/>);
               
                pickerItems.unshift(<Picker.Item label={`Select ${DisplayName}`} value={""} 

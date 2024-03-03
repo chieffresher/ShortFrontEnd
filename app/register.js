@@ -2,8 +2,8 @@ import {useState} from 'react';
 import { View, TextInput, Button, StyleSheet,Alert } from 'react-native';
 import Picker from "../components/DropDown";
 import {isValidEmail} from "../assets/helpercode/utilities";
+import axios from 'axios';
 
-//cleaned code
 
 const Register = () => {
 
@@ -49,6 +49,17 @@ const Register = () => {
        }
 
        //send data to server
+       axios.post("http://72.167.150.61:7002/api/registered",
+       {Id:0,
+        RegisteredName:name,
+        FromCountry:country,
+        EmailAddress:email,
+        EmailPassword:password})
+        .then((response)=>
+        { //console.log(response);
+          Alert.alert("Registration was successful.");
+        })
+        .catch(err => console.log(`Error saving new account : ${err}`))
   }
    
   return (
@@ -64,6 +75,7 @@ const Register = () => {
       selectedItem = {country}
       onSelectValueChange = {setCountry}
       ApiUrl={"http://72.167.150.61:7002/api/country"}
+      DbValueFieldName={"name"}
       ApiAuthorizationHeader={""}
       />
 
