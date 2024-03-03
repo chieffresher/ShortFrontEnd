@@ -30,23 +30,11 @@ export default function Home() {
       <Link href={"/addshort"} style={styles.paragraph}>
          <Text>{"Add Short"}</Text>
       </Link>
-
-      {/**
-       * <Button
-      onPress={onBtnClick}
-      title={btnName}
-      accessibilityLabel="click this button to sign or create short"
-      />
-       */}
       
       </View> 
 
       </SafeAreaView>
   );
-}
-
-function onBtnClick(){
-      
 }
 
 

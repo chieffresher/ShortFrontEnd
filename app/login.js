@@ -3,7 +3,7 @@ import { View, TextInput, Button, StyleSheet,Text,
   TouchableOpacity,Alert } from 'react-native';
 import { Link } from 'expo-router';
 import axios  from 'axios';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -26,18 +26,19 @@ const Login = () => {
     {Id:0,
      UserEmail:email,
      UserPassword:password})
-     .then(res => 
+     .then(async(res) => 
       {
         let data = res.data
         if(data.isUser === true)
         {
            console.log("login successful")
-           let token = data.jwtToken;
-           console.log("Token : "+token)
+           // Store token securely
+            await AsyncStorage.setItem('token', data.jwtToken);
+          //redirect to dashboard or home page
         }
         else
         {
-          console.log("login failed.");
+          Alert.alert("Login failed. Provide valid email and password.");
         }
       })
      .catch(err => console.log(`Error validating user : ${err}`))
