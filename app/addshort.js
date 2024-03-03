@@ -23,6 +23,27 @@ export default function AddShort()
         Industry : ${selectedIndustry} Phone Number : ${phoneNumber}`) */
 
         //validate input
+          //emptyness
+          if(selectedAccountType.trim()==="")
+          {
+            Alert.alert("Account Type cannot be empty.")
+            return
+          }
+          if(selectedIndustry.trim()==="")
+          {
+            Alert.alert("Industry cannot be empty.")
+            return
+          }
+          if(name.trim()==="")
+          {
+            Alert.alert("Name cannot be empty.")
+            return 
+          }
+          if(phoneNumber.trim() === "")
+          {
+            Alert.alert("Phone number cannot be empty.")
+            return
+          }
 
         //send data to server
     }
