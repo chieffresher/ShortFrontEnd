@@ -2,26 +2,43 @@ import DropDown from "../components/DropDown";
 import PhoneNumberInput from "../components/PhoneNumberInput";
 
 import {SafeAreaView,Text,TextInput,StyleSheet,Button,Alert} from "react-native";
-import {useState} from "react";
+import {useState,useEffect} from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import Industries from "../assets/data/industries";
-import AccountTypes from "../assets/data/AccountTypes";
+//import Industries from "../assets/data/industries";
+//import AccountTypes from "../assets/data/AccountTypes";
 
 
 
 export default function AddShort()
 {
-    const [accountTypes, setItems] = useState(AccountTypes);
-    const [industries,setIndustry] = useState(Industries);
+    const [accountTypes, setItems] = useState([]);
+    const [industries,setIndustry] = useState([]);
     const [name,setName] = useState("");
     const [selectedAccountType,setSelectedAccountType] = useState("");
     const [selectedIndustry,setSelectedIndustry] = useState("");
     const [phoneNumber,setPhoneNumber] = useState("");
+    const [token,setToken] = useState("")
+
+  
+    //set token
+    useEffect(() => {
+      const retrieveToken = async () => {
+        try {
+          const storedToken = await AsyncStorage.getItem('token');
+          if (storedToken !== null) {
+            setToken(storedToken);
+          }
+        } catch (error) {
+          console.error('Error retrieving token:', error);
+        }
+      };
+  
+      retrieveToken();
+    }, []); 
 
     const submit = () => {
-       /* Alert.alert(`Account Type : ${selectedAccountType} Name : ${name}
-        Industry : ${selectedIndustry} Phone Number : ${phoneNumber}`) */
-
+      
         //validate input
           //emptyness
           if(selectedAccountType.trim()==="")
@@ -57,12 +74,18 @@ export default function AddShort()
       </Text>
 
       {/** Account Type : Personal/Individual/Institution    */}
+      {/**Check if token is set before rendering this element */}
+      { token &&
       <DropDown 
-      PickerItems={accountTypes} 
-      DisplayName={"Account Type"}  
+      PickerItems={[]} 
+      DisplayName={"Account Type"}
+      ApiUrl={"http://72.167.150.61:7002/api/accounttypes/"}
+      DbValueFieldName={"name"}
+      ApiAuthorizationHeader={token}  
       style={styles.shortType}
       selectedItem={selectedAccountType}
       onSelectValueChange={setSelectedAccountType}/>
+     }
     
 
       {/**Name : name of person or institution */}
@@ -80,13 +103,18 @@ export default function AddShort()
 
 
       {/**Primary Industry: industry person or business belong to */}
-      
+      {/**Check if token is set before rendering this element */}
+      { token &&
       <DropDown 
-      PickerItems={industries} 
-      DisplayName={"Industry"}  
+      PickerItems={[]} 
+      DisplayName={"Industry"} 
+      ApiUrl={"http://72.167.150.61:7002/api/industry/"}
+      DbValueFieldName={"name"} 
+      ApiAuthorizationHeader={token}
       style={styles.dropdown}
       selectedItem={selectedIndustry}
       onSelectValueChange={setSelectedIndustry}/>
+      }
        
       <Button
       style = {styles.btn}

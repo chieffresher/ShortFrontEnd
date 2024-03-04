@@ -28,6 +28,7 @@ export default function DropDown({PickerItems, DisplayName, selectedItem,
             }
             else
             {
+               console.log("Token received (DropDown):"+ApiAuthorizationHeader)
                let response = await axios.get(ApiUrl,
                 {headers: {Authorization: ApiAuthorizationHeader}}) // (optional) setting authorization header
 
