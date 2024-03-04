@@ -3,7 +3,7 @@ import { View, TextInput, Button, StyleSheet,Alert } from 'react-native';
 import Picker from "../components/DropDown";
 import {isValidEmail} from "../assets/helpercode/utilities";
 import axios from 'axios';
-
+import { useNavigation } from '@react-navigation/native';
 
 const Register = () => {
 
@@ -13,6 +13,7 @@ const Register = () => {
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
   const [confirmPassword,setConfirmPassword] = useState("");
+  const navigation = useNavigation();
 
   //submit method
    submit = () => {
@@ -56,8 +57,11 @@ const Register = () => {
         EmailAddress:email,
         EmailPassword:password})
         .then((response)=>
-        { //console.log(response);
+        { 
           Alert.alert("Registration was successful.");
+          //redirect to dashboard or home page
+          navigation.navigate('login')
+
         })
         .catch(err => console.log(`Error saving new account : ${err}`))
   }
