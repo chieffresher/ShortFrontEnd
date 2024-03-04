@@ -79,7 +79,7 @@ const Register = () => {
       selectedItem = {country}
       onSelectValueChange = {setCountry}
       ApiUrl={"http://72.167.150.61:7002/api/country"}
-      DbValueFieldName={"name"}
+      DbValueFieldName={"countryName"}
       ApiAuthorizationHeader={""}
       />
 

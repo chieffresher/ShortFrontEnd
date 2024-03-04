@@ -75,7 +75,7 @@ export default function AddShort()
       PickerItems={[]} 
       DisplayName={"Account Type"}
       ApiUrl={"http://72.167.150.61:7002/api/accounttypes/"}
-      DbValueFieldName={"name"}
+      DbValueFieldName={"typeName"}
       ApiAuthorizationHeader={token}  
       style={styles.shortType}
       selectedItem={selectedAccountType}
@@ -104,7 +104,7 @@ export default function AddShort()
       PickerItems={[]} 
       DisplayName={"Industry"} 
       ApiUrl={"http://72.167.150.61:7002/api/industry/"}
-      DbValueFieldName={"name"} 
+      DbValueFieldName={"industryName"} 
       ApiAuthorizationHeader={token}
       style={styles.dropdown}
       selectedItem={selectedIndustry}
