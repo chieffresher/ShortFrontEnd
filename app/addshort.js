@@ -1,9 +1,9 @@
 import DropDown from "../components/DropDown";
 import PhoneNumberInput from "../components/PhoneNumberInput";
-
 import {SafeAreaView,Text,TextInput,StyleSheet,Button,Alert} from "react-native";
 import {useState,useEffect} from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from "axios";
 
 export default function AddShort()
 {
@@ -58,6 +58,31 @@ export default function AddShort()
           }
 
         //send data to server
+        axios.post("http://72.167.150.61:7002/api/short/isshortvalid/",
+        { Id: 0,
+         ShortName : name,
+         ShortAccountType:selectedAccountType,
+         PhoneNumber:phoneNumber,
+         ShortIndustry:selectedIndustry},
+         {headers:{Authorization:token}})
+         .then((res) => 
+         {
+           //valid request
+           if(res.status == 200)
+           {
+               //send 4 digits code to check that phone number is active
+               console.log("moving on with the rest of activities.")
+           }
+           else
+           {
+              //invalid record
+              console.log("invalid record")
+           }
+         })
+         .catch(err=> 
+          {
+            console.log(`Error checking validity of data : ${err}`)
+          })
     }
 
     return (
