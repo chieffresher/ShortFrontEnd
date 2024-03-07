@@ -76,12 +76,20 @@ export default function AddShort()
            else
            {
               //invalid record
-              console.log("invalid record")
+              console.log("Could not validate short from client.")
+              Alert.alert("Error validating your data now. Try again later.")
            }
          })
          .catch(err=> 
           {
-            console.log(`Error checking validity of data : ${err}`)
+            if(err.response)
+                Alert.alert(err.response.data)
+            else
+            {
+              console.log(`Error checking validity of data : ${err}`)
+              Alert.alert("Error validating your data now. Try again later.")
+            }
+              
           })
     }
 
