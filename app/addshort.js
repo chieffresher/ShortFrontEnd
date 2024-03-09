@@ -4,6 +4,7 @@ import {SafeAreaView,Text,TextInput,StyleSheet,Button,Alert} from "react-native"
 import {useState,useEffect} from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
+import { getRandomNumber, sendMessage } from "../assets/helpercode/utilities";
 
 export default function AddShort()
 {
@@ -31,6 +32,7 @@ export default function AddShort()
   
       retrieveToken();
     }, []); 
+
 
     const submit = () => {
       
@@ -71,6 +73,35 @@ export default function AddShort()
            if(res.status == 200)
            {
                //send 4 digits code to check that phone number is active
+               let fourDigitCode = getRandomNumber(1000,9999)
+               console.log("Code : "+fourDigitCode)
+
+               //To be implemented later
+               //send code to phone number
+               //sendMessage(fourDigitCode,phoneNumber)
+
+               //save short
+               axios.post("http://72.167.150.61:7002/api/short/",
+                { Id: 0,
+                ShortName : name,
+                ShortAccountType:selectedAccountType,
+                PhoneNumber:phoneNumber,
+                ShortIndustry:selectedIndustry},
+                {headers:{Authorization:token}})
+                .then((res)=>
+                {
+                     Alert.alert("Short Code created successfully.")
+                })
+                .catch(
+                  error=>
+                  {
+                    //log error
+                    console.log(`Error saving short code : ${error}`)
+                    //inform user
+                    Alert.alert("Short Code saving failed. Try again later.")
+                  }
+                  )
+
                console.log("moving on with the rest of activities.")
            }
            else
