@@ -5,6 +5,7 @@ import {useState,useEffect} from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 import { getRandomNumber, sendMessage } from "../assets/helpercode/utilities";
+import InputDialog from "../components/inputDialog";
 
 export default function AddShort()
 {
@@ -15,8 +16,74 @@ export default function AddShort()
     const [selectedIndustry,setSelectedIndustry] = useState("");
     const [phoneNumber,setPhoneNumber] = useState("");
     const [token,setToken] = useState("")
+    //dialog
+    const [dialogVisible, setDialogVisible] = useState(false);
+    const [verificationCode, setVerificationCode] = useState('');
+    const[generatedCode,setGeneratedCode] = useState("");
 
+    //event handlers for dialog
+    const handleOpenDialog = () => {
+      setDialogVisible(true);
+    };
   
+    const handleCloseDialog = () => {
+      setDialogVisible(false);
+    };
+  
+    const handleSubmitDialog = (value) => {
+       setVerificationCode(value);
+       //wait for 5 seconds
+       setTimeout(checkVerificationCode,5000)
+       
+    };
+
+    const checkVerificationCode = () =>
+    {
+      console.log("verification code : "+verificationCode)
+    }
+
+    const isCodeValid = () =>
+    {
+       //verify code
+       console.log("verification : "+verificationCode)
+       console.log("generated : "+generatedCode)
+
+       if(generatedCode.trim() != verificationCode.trim())
+       {
+          Alert.alert("Invalid verification code.")
+          return false
+       }
+
+       return true
+    }
+
+    const saveShort = () => 
+    {
+          //save short if code is valid
+          axios.post("http://72.167.150.61:7002/api/short/",
+          { Id: 0,
+          ShortName : name,
+          ShortAccountType:selectedAccountType,
+          PhoneNumber:phoneNumber,
+          ShortIndustry:selectedIndustry},
+          {headers:{Authorization:token}})
+          .then((res)=>
+          {
+               Alert.alert("Short Code created successfully.")
+                //reset generated code
+               setGeneratedCode("")
+          })
+          .catch(
+            error=>
+            {
+              //log error
+              console.log(`Error saving short code : ${error}`)
+              //inform user
+              Alert.alert("Short Code saving failed. Try again later.")
+            }
+            )
+    }
+
     //set token
     useEffect(() => {
       const retrieveToken = async () => {
@@ -33,9 +100,13 @@ export default function AddShort()
       retrieveToken();
     }, []); 
 
+    //set generated code
+    if(generatedCode.trim() === "")
+      setGeneratedCode(getRandomNumber(1000,9999).toString())
+
 
     const submit = () => {
-      
+         
         //validate input
           //emptyness
           if(selectedAccountType.trim()==="")
@@ -73,36 +144,12 @@ export default function AddShort()
            if(res.status == 200)
            {
                //send 4 digits code to check that phone number is active
-               let fourDigitCode = getRandomNumber(1000,9999)
-               console.log("Code : "+fourDigitCode)
-
-               //To be implemented later
-               //send code to phone number
-               //sendMessage(fourDigitCode,phoneNumber)
-
-               //save short
-               axios.post("http://72.167.150.61:7002/api/short/",
-                { Id: 0,
-                ShortName : name,
-                ShortAccountType:selectedAccountType,
-                PhoneNumber:phoneNumber,
-                ShortIndustry:selectedIndustry},
-                {headers:{Authorization:token}})
-                .then((res)=>
-                {
-                     Alert.alert("Short Code created successfully.")
-                })
-                .catch(
-                  error=>
-                  {
-                    //log error
-                    console.log(`Error saving short code : ${error}`)
-                    //inform user
-                    Alert.alert("Short Code saving failed. Try again later.")
-                  }
-                  )
-
-               console.log("moving on with the rest of activities.")
+               console.log("code : "+generatedCode)
+               setDialogVisible(true)
+               //sent code to phone
+               
+               //create short code if code is valid. Do this when verification code is entered
+               
            }
            else
            {
@@ -175,14 +222,20 @@ export default function AddShort()
       onSelectValueChange={setSelectedIndustry}/>
       }
        
+      {/**Dialog for sms code validation (phone number verification) */}
+      <InputDialog
+        visible={dialogVisible}
+        onClose={handleCloseDialog}
+        onSubmit={handleSubmitDialog}
+        placeholder={"Enter 4 digit code sent to you"}
+      />
+
       <Button
       style = {styles.btn}
       onPress={submit}
       title="Add Short"
       accessibilityLabel="click this button to register"
-
       />
-
 
       </SafeAreaView>
     );    
