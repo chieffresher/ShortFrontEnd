@@ -32,30 +32,8 @@ export default function AddShort()
   
     const handleSubmitDialog = (value) => {
        setVerificationCode(value);
-       //wait for 5 seconds
-       setTimeout(checkVerificationCode,5000)
        
     };
-
-    const checkVerificationCode = () =>
-    {
-      console.log("verification code : "+verificationCode)
-    }
-
-    const isCodeValid = () =>
-    {
-       //verify code
-       console.log("verification : "+verificationCode)
-       console.log("generated : "+generatedCode)
-
-       if(generatedCode.trim() != verificationCode.trim())
-       {
-          Alert.alert("Invalid verification code.")
-          return false
-       }
-
-       return true
-    }
 
     const saveShort = () => 
     {
@@ -99,6 +77,26 @@ export default function AddShort()
   
       retrieveToken();
     }, []); 
+
+    //submit form when code is verified
+    useEffect(() => {
+      const verifyCode = () => 
+      {
+         if(verificationCode.trim() !== "" && verificationCode ===generatedCode)
+         {
+              //save short
+              saveShort()
+              //reset verification code and generated code
+              setVerificationCode("")
+              setGeneratedCode("")
+              return 
+         }
+         else if(verificationCode.trim() !=="" && generatedCode !== verificationCode)
+          Alert.alert("Wrong code")
+      };
+  
+      verifyCode();
+    }, [verificationCode]); 
 
     //set generated code
     if(generatedCode.trim() === "")
@@ -148,8 +146,7 @@ export default function AddShort()
                setDialogVisible(true)
                //sent code to phone
                
-               //create short code if code is valid. Do this when verification code is entered
-               
+               //creating or saving short code is delegated to verification code event handler
            }
            else
            {
