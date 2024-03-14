@@ -28,12 +28,13 @@ const styles = StyleSheet.create({
     flexDirection : 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    margin:10,
+    margin:30,
   },
   inputText: {
     padding : 5,
-    borderColor:'blue',
+    borderColor:'green',
     borderWidth: 2,
+    borderRadius:25,
     flexGrow: 4,
     
   },

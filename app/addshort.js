@@ -144,7 +144,7 @@ export default function AddShort()
                //send 4 digits code to check that phone number is active
                console.log("code : "+generatedCode)
                setDialogVisible(true)
-               //sent code to phone
+               //sent code to phone : call api endpoint to do that.
                
                //creating or saving short code is delegated to verification code event handler
            }
