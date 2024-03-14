@@ -1,4 +1,4 @@
-import { View, StyleSheet,TextInput, Image,Pressable,Alert } from 'react-native';
+import { View, StyleSheet,TextInput, Image,Pressable,Alert,Linking } from 'react-native';
 import React, { useState } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -32,7 +32,26 @@ export default function InputWithSuggestion()
               return
             }
             //bring up the call dialog
-            Alert.alert("Ready to call.")
+            let phoneNumber = res.data;
+            const phoneUrl = `tel:${phoneNumber}`;
+            Linking.canOpenURL(phoneUrl)
+            .then(supported => 
+            {
+              if (!supported) 
+              {
+                console.log(`Phone call is not supported on this device`);
+              } 
+              else 
+              {
+                return Linking.openURL(phoneUrl);
+              }
+            })
+            .catch(error => 
+              {
+                console.log("Error placing a call : "+error)
+                Alert.alert("Phone does not this support operation.")
+              })
+
           })
         .catch(err => 
           {
