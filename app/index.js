@@ -3,7 +3,7 @@ import {useState} from "react";
 import { Link } from 'expo-router';
 
 //textbox with call button
-import TextBoxWithButton from "../components/TextboxWithButton";
+import ShortCodeCaller from "../components/TextboxWithButton";
 
 
 export default function Home() {
@@ -15,7 +15,7 @@ export default function Home() {
         Short
       </Text>
 
-      <TextBoxWithButton />
+      <ShortCodeCaller />
 
       <View style={styles.btnContainer}> 
          
